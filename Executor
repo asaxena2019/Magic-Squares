@@ -1,0 +1,155 @@
+import java.io.*;
+import java.util.*;
+
+public class Magic
+{
+    public int[][] sqMatrix;
+    public int size =0;
+    int rows = 0;
+    int cols = 0;
+    public Magic()
+    {
+    }
+    
+    public void fillArray() {
+        rows = 0;
+        cols = 0;
+        Scanner console = new Scanner(System.in);
+        System.out.println("Enter size:");
+        size = Integer.parseInt(console.nextLine());
+        
+        System.out.println(size);
+        sqMatrix = new int[size][size];
+        for (rows = 0; rows < size; rows++)
+        {
+          cols =0;
+          for(cols = 0; cols < size ; cols++)
+          {
+            System.out.println("Enter value for row:" + (rows + 1) + " coloumn:" + (cols + 1));
+            sqMatrix[rows][cols] = Integer.parseInt(console.nextLine());
+          }
+        }
+    }
+    
+
+    
+    
+    public boolean checkValue(int value, int refRows, int refCols)
+    {
+        int cRows = 0;
+        int cCols = 0;
+//        System.out.println("checkValue " + value);
+        for (cRows = 0; cRows < size; cRows++)
+        {
+          cCols =0;
+          for(cCols = 0; cCols < size ; cCols++)
+          {
+            if(sqMatrix[cRows][cCols] == value)
+            {
+//              System.out.println("checkValue sqMatrix " + cRows + " " + cCols);
+              if(!((cRows == refRows) && (cCols ==refCols)))
+              {
+//                System.out.println("checkValue TRUE");
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+    }
+    
+    public boolean fullSquare() {
+        int fRows = 0;
+        int fCols = 0;
+        for (fRows = 0; fRows < size; fRows++)
+        {
+          fCols =0;
+          for(fCols = 0; fCols < size ; fCols++)
+          {
+            if(checkValue(sqMatrix[fRows][fCols], fRows, fCols))
+                 return false;
+          }
+        }        
+      return true;
+    }
+    
+    public int addRow(int row){
+      int x =0;
+      int sum =0;
+      for (x=0; x < size; x++)
+      {
+        sum += sqMatrix[row][x];
+      }
+      return sum;
+    }
+
+    public int addCol(int colm){
+      int x =0;
+      int sum =0;
+      for (x=0; x < size; x++)
+      {
+        sum += sqMatrix[x][colm];
+      }
+      return sum;
+    }
+    
+    public int addDiag() {
+      int x =0;
+      int sum =0;
+      for (x=0; x < size; x++)
+      {
+        sum += sqMatrix[x][x];
+      }
+      return sum;      
+    }
+    
+    public int addDiagCross() {
+      int x =0;
+      int sum =0;
+      for (x=0; x < (size); x++)
+      {
+        sum += sqMatrix[size-x-1][x];
+      }
+      return sum;      
+    }
+    
+    public int isMagic()
+    {
+        int fRows = 0;
+        int fCols = 0;
+        int sumRow = addRow(0);
+        for (fRows = 0; fRows < size; fRows++)
+        {
+          if(sumRow != addRow(fRows))
+            return -1;
+        }
+        for (fCols = 0; fCols < size; fCols++)
+        {
+          if(sumRow != addCol(fCols))
+            return -1;
+        }
+        if(sumRow != addDiag())
+          return -1;
+
+        if(sumRow != addDiagCross())
+          return -1;        
+        return sumRow;
+    }
+    
+    public static void main(String[] args) throws IOException
+    {
+        Square mSquareArray = new Square();
+        mSquareArray.fillArray();
+        if(mSquareArray.fullSquare()) {
+          System.out.println("Full Square");
+          if(mSquareArray.isMagic() != -1) {
+            System.out.println("Magic Square; Magic Number is " + mSquareArray.isMagic());
+          }
+          else
+            System.out.println("Not Magic Square");
+        }
+        else {
+          System.out.println("Not Full Square");
+        }
+    }
+}
